@@ -1,0 +1,49 @@
+#define function addTwo(uint256, uint256) view returns(uint256)
+
+// The Basics
+// #define macro MAIN() = takes(0) returns(0) {
+//     // Get the function selector
+//     0x00
+//     calldataload
+//     0xE0
+//     shr
+
+//     // Jump to the implementation of the ADD_TWO function 
+//     // if the calldata matches the function selector
+//     __FUNC_SIG(addTwo) eq addTwo jumpi
+
+//     addTwo:
+//         ADD_TWO()
+// }
+
+// #define macro ADD_TWO() = takes(0) returns(0) {
+//     0x04 calldataload     // load first 32 bytes onto the stack - number 1
+//     0x24 calldataload     // load second 32 bytes onto the stack - number 2
+//     add                   // add number 1 and 2 and put the result onto the stack
+
+//     0x00 mstore           // place the result in memory
+//     0x20 0x00 return      // return the result
+// }
+
+// Hello World
+#define macro MAIN() = takes(0) returns(0) {
+    // store dynamic offset of 0x20 at 0x00
+    0x20                                        // [0x20]
+    0x00                                        // [0x00, 0x20]
+    mstore                                      // []
+
+    // store string length of 0x0d at 0x20
+    0x0d                                        // [0x0d]
+    0x20                                        // [0x20, 0x0d]
+    mstore                                      // []
+
+    // store bytes for "Hello, World!" at 0x40
+    _RIGHTPAD(0x48656c6c6f2c20776f726c6421)     // ["Hello, world!"]
+    0x40                                        // [0x40, "Hello, world!"]
+    mstore                                      // []
+
+    // return full 96 byte value
+    0x60                                        // [0x60]
+    0x00                                        // [0x00, 0x60]
+    return                                      // []
+}
